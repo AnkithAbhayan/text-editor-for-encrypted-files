@@ -1,0 +1,5 @@
+ankith (for encryption and decryption into .ankiecrypt files)
+tkinter (for the user-interface)
+import os (finding out whether file exists)
+import sys (getting command-line arguments for determining path of file)
+import json (saving cache)
