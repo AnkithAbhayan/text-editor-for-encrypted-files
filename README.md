@@ -8,12 +8,7 @@ and also ankith.py which contains my encryption algorithm.
 run - texteditor.py and not ankith.py  
 enjoy!  
 
-latest version - v1.2.    
-prompts for password everytime before opening.(tkinter ui)  
-ability to change password and reset password in the menubar(prompts for current password before changing/resetting password.)  
-deleted unnecessary functions in ankith.py.  
-
-spoliers for version - v1.3!   
-title of the editor window will contain the file-size and current time.  
-settings option in the menubar?  
-
+latest version - v1.3(still working on it!).    
+title of the editor window will contain the file-size.
+added an 'exit' button in the file menu of the menubar to stop runnng.
+previously opened files can be accessed through the menubar as well.
