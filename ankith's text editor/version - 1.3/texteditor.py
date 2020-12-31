@@ -4,6 +4,23 @@ from tkinter import filedialog
 import os
 import sys
 import json
+def savetofilehistory(string):
+    path = findjsonpath()
+    with open(path, "r") as jsonFile:
+        data = json.load(jsonFile)
+    if string in data["previousfiles"]:
+        data["previousfiles"].remove(string)
+    data["previousfiles"].insert(0,string)
+    with open(path, "w") as jsonFile:
+        json.dump(data,jsonFile,indent=4)
+def getpreviousfiles():
+    jsonpath = findjsonpath()
+    with open(jsonpath,"r") as JsonFile:
+        data = json.load(JsonFile)
+    array = data["previousfiles"]
+    with open(jsonpath, "w") as jsonFile:
+        json.dump(data,jsonFile,indent=4)
+    return array 
 def promptnewpass():
     def removeasterix():
         newpasswordentry.configure(show="")
@@ -87,7 +104,7 @@ def initializejson():
     if os.path.exists(path) == False:
         password = getpassword()
         with open(path, "w") as jsonFile:
-            json.dump({"path":"","password":ankith.cryptography.encrypt(password)},jsonFile,indent=4)
+            json.dump({"path":"","password":ankith.cryptography.encrypt(password),"previousfiles":[]},jsonFile,indent=4)
 def getpassword():
     jsonfilepath = findjsonpath()
     if os.path.exists(jsonfilepath):
@@ -147,18 +164,32 @@ def getpath():
 def savepath(path):
     jsonfilepath = findjsonpath()
     password = getpassword()
+    previousopenedarray = getpreviousfiles()
     with open(jsonfilepath, "w") as jsonFile:
-        json.dump({"path":path,"password":password},jsonFile,indent=4)
-def open_file():
-    path = filedialog.askopenfilename()
-    if path != "":
-        file = open(path,"r")
-        data = file.read()
-        text_field.delete('1.0', END)
-        text_field.insert(0.0,ankith.cryptography.decrypt(data))
-        file.close()
-        savepath(path)
-        root.title(path+" ["+ankith.cryptography.findsize(os.path.getsize(path))+"]")
+        json.dump({"path":path,"password":password,"previousfiles":previousopenedarray},jsonFile,indent=4)
+def open_file(path):
+    jsonpath = findjsonpath()
+    if path == "":
+        path = filedialog.askopenfilename()
+        if path != "":
+            file = open(path,"r")
+            data = file.read()
+            text_field.delete('1.0', END)
+            text_field.insert(0.0,ankith.cryptography.decrypt(data))
+            file.close()
+            savepath(path)
+            root.title(path+" ["+ankith.cryptography.findsize(os.path.getsize(path))+"]")
+            savetofilehistory(path)
+    else:
+        if os.path.exists(path):
+            file = open(path,"r")
+            data = file.read()
+            text_field.delete('1.0', END)
+            text_field.insert(0.0,ankith.cryptography.decrypt(data))
+            file.close()
+            savepath(path)
+            root.title(path+" ["+ankith.cryptography.findsize(os.path.getsize(path))+"]")
+            savetofilehistory(path)
 def initialize():
     path = getpath()
     data = ""
@@ -195,6 +226,8 @@ def save_file(string):
         file = open(path,"w")
         file.write(ankith.cryptography.encrypt(text_field.get("1.0",END)))
         root.title(path+" ["+ankith.cryptography.findsize(os.path.getsize(path))+"]")
+    jsonpath = findjsonpath()
+    savetofilehistory(path)
 def processcommand():
     command = command_pane.get()
     if command == ":s":
@@ -204,7 +237,7 @@ def processcommand():
     elif command == ":n":
         new_file()
     elif command == ":o":
-        open_file()
+        open_file("")
     command_pane.delete(0, END)
 accessqmark = False
 getaccess()
@@ -216,14 +249,23 @@ root.resizable(0,0)
 menubar = Menu(root)
 root.config(menu=menubar)
 
-fileMenu = Menu(menubar)
-fileMenu.add_command(label="open",command=lambda:open_file())
+fileMenu = Menu(menubar,tearoff=0)
+fileMenu.add_command(label="new",command=lambda:new_file())
+fileMenu.add_command(label="open",command=lambda:open_file(""))
 fileMenu.add_command(label="save",command=lambda:save_file("same"))
 fileMenu.add_command(label="save as",command=lambda:save_file("new"))
-fileMenu.add_command(label="new",command=lambda:new_file())
+fileMenu.add_separator()
+filehistorysubmenu = Menu(fileMenu,tearoff=0)
+previous_files = getpreviousfiles()
+print(previous_files)
+for item in previous_files:
+    filehistorysubmenu.add_command(label=item,command=lambda:open_file())
+fileMenu.add_cascade(label="open previous",menu=filehistorysubmenu,underline=0)
+fileMenu.add_separator()
+fileMenu.add_command(label="exit",command=lambda:sys.exit())
 menubar.add_cascade(label="File", menu=fileMenu)
 
-Access = Menu(menubar)
+Access = Menu(menubar,tearoff=0)
 Access.add_command(label="change password",command=lambda:changepassword("nil"))
 Access.add_command(label="reset password",command=lambda:changepassword("original"))
 menubar.add_cascade(label="Access",menu=Access)
@@ -232,6 +274,7 @@ inserttext = initialize()
 text_field = Text(root,width=105,height=30,font="consolas",bd=2,wrap=WORD)
 text_field.grid(row=0,column=0,columnspan=2)
 text_field.insert(0.0,inserttext)
+
 scroll_bar = Scrollbar(root, orient="vertical", command=text_field.yview)
 scroll_bar.grid(column=2, row=0,sticky=N+S+W)
 command_pane_label = Label(text="CommandPane",width=11).grid(row=1,column=0)
