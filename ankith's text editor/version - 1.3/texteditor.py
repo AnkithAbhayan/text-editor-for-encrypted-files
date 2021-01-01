@@ -233,6 +233,10 @@ def processcommand(string=False):
         command = string
     else:
         command = command_pane.get()
+        text_field.config(state="normal")
+        text_field.focus()
+        command_pane.delete(0, END)
+        command_pane.config(state="disabled")
     if command == ":s":
         save_file("same")
     elif command == ":sa":
@@ -241,18 +245,17 @@ def processcommand(string=False):
         new_file()
     elif command == ":o":
         open_file("")
-    command_pane.delete(0, END)
 def allowentrytocommandpane():
     if command_pane["state"] == "disabled":
         command_pane.config(state='normal')
         text_field.config(state='disabled')
         command_pane.focus()
     elif command_pane["state"] == "normal":
+        text_field.config(state='normal')
+        text_field.focus()
         processcommand(command_pane.get())
         command_pane.delete(0,END)
         command_pane.config(state='disabled')
-        text_field.config(state='normal')
-        text_field.focus()
 accessqmark = False
 getaccess()
 if accessqmark != True:
@@ -272,7 +275,7 @@ fileMenu.add_separator()
 filehistorysubmenu = Menu(fileMenu,tearoff=0)
 previous_files = getpreviousfiles()
 for item in previous_files:
-    filehistorysubmenu.add_command(label=item,command=lambda:open_file())
+    filehistorysubmenu.add_command(label=item,command=lambda:open_file(""))
 fileMenu.add_cascade(label="open previous",menu=filehistorysubmenu,underline=0)
 fileMenu.add_separator()
 fileMenu.add_command(label="exit",command=lambda:sys.exit())
