@@ -73,7 +73,7 @@ def changepassword(string):
                 data = json.load(JsonFile)
             data["password"] = ankith.cryptography.encrypt("wakapie")
             with open(getpath, "w") as jsonFile:
-                json.dump(data,jsonFile,indent=4)       
+                json.dump(data,jsonFile,indent=4)
         path = findjsonpath()
         if os.path.exists(path):
             realpassword = ankith.cryptography.decrypt(getpassword())
@@ -228,8 +228,11 @@ def save_file(string):
         root.title(path+" ["+ankith.cryptography.findsize(os.path.getsize(path))+"]")
     jsonpath = findjsonpath()
     savetofilehistory(path)
-def processcommand():
-    command = command_pane.get()
+def processcommand(string=False):
+    if string != False:
+        command = string
+    else:
+        command = command_pane.get()
     if command == ":s":
         save_file("same")
     elif command == ":sa":
@@ -239,6 +242,17 @@ def processcommand():
     elif command == ":o":
         open_file("")
     command_pane.delete(0, END)
+def allowentrytocommandpane():
+    if command_pane["state"] == "disabled":
+        command_pane.config(state='normal')
+        text_field.config(state='disabled')
+        command_pane.focus()
+    elif command_pane["state"] == "normal":
+        processcommand(command_pane.get())
+        command_pane.delete(0,END)
+        command_pane.config(state='disabled')
+        text_field.config(state='normal')
+        text_field.focus()
 accessqmark = False
 getaccess()
 if accessqmark != True:
@@ -246,9 +260,9 @@ if accessqmark != True:
 initializejson()
 root = Tk()
 root.resizable(0,0)
+root.bind("<F2>",(lambda event: allowentrytocommandpane()))
 menubar = Menu(root)
 root.config(menu=menubar)
-
 fileMenu = Menu(menubar,tearoff=0)
 fileMenu.add_command(label="new",command=lambda:new_file())
 fileMenu.add_command(label="open",command=lambda:open_file(""))
@@ -257,7 +271,6 @@ fileMenu.add_command(label="save as",command=lambda:save_file("new"))
 fileMenu.add_separator()
 filehistorysubmenu = Menu(fileMenu,tearoff=0)
 previous_files = getpreviousfiles()
-print(previous_files)
 for item in previous_files:
     filehistorysubmenu.add_command(label=item,command=lambda:open_file())
 fileMenu.add_cascade(label="open previous",menu=filehistorysubmenu,underline=0)
@@ -278,8 +291,8 @@ text_field.insert(0.0,inserttext)
 scroll_bar = Scrollbar(root, orient="vertical", command=text_field.yview)
 scroll_bar.grid(column=2, row=0,sticky=N+S+W)
 command_pane_label = Label(text="CommandPane",width=11).grid(row=1,column=0)
-command_pane = Entry(root,width=140)
+command_pane = Entry(root,width=140,state='disabled')
 command_pane.grid(row=1,column=1)
-root.bind("<Return>", (lambda event: processcommand()))
+command_pane.bind("<Return>", (lambda event: processcommand()))
 text_field.configure(yscrollcommand=scroll_bar.set)
 root.mainloop()
