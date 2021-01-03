@@ -256,12 +256,10 @@ def allowentrytocommandpane():
         processcommand(command_pane.get())
         command_pane.delete(0,END)
         command_pane.config(state='disabled')
-"""    
 accessqmark = False
 getaccess()
 if accessqmark != True:
     sys.exit()
-"""
 initializejson()
 root = Tk()
 root.resizable(0,0)
