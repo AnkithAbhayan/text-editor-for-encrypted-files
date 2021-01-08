@@ -146,7 +146,9 @@ def findjsonpath():
     relative_path = sys.argv[0]
     letter_list = [x for x in relative_path]
     slashindex = []
-    lix = ["\ "]   
+    lix = ["\ "] 
+    if lix[0][0] not in letter_list:
+        return "cache.json"  
     for item in letter_list:
         if item == lix[0][0]:
             indexx = letter_list.index(lix[0][0])
@@ -256,13 +258,15 @@ def allowentrytocommandpane():
         processcommand(command_pane.get())
         command_pane.delete(0,END)
         command_pane.config(state='disabled')
+"""
 accessqmark = False
 getaccess()
 if accessqmark != True:
     sys.exit()
+"""
 initializejson()
 root = Tk()
-root.resizable(0,0)
+#root.resizable(0,0)
 root.bind("<F2>",(lambda event: allowentrytocommandpane()))
 menubar = Menu(root)
 root.config(menu=menubar)
@@ -288,14 +292,14 @@ menubar.add_cascade(label="Access",menu=Access)
 
 inserttext = initialize()
 text_field = Text(root,width=105,height=30,font="consolas",bd=2,wrap=WORD)
-text_field.grid(row=0,column=0,columnspan=2)
+text_field.grid(row=0,column=0,columnspan=2,sticky=N+S+E+W)
 text_field.insert(0.0,inserttext)
 
 scroll_bar = Scrollbar(root, orient="vertical", command=text_field.yview)
-scroll_bar.grid(column=2, row=0,sticky=N+S+W)
+scroll_bar.grid(column=2, row=0,sticky=N+S+E)
 command_pane_label = Label(text="CommandPane",width=11).grid(row=1,column=0)
 command_pane = Entry(root,width=140,state='disabled')
-command_pane.grid(row=1,column=1)
+command_pane.grid(row=1,column=1,sticky=S)
 command_pane.bind("<Return>", (lambda event: processcommand()))
 text_field.configure(yscrollcommand=scroll_bar.set)
 root.mainloop()
