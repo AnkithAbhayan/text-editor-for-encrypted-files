@@ -1,5 +1,4 @@
-ankith (for encryption and decryption into .ankiecrypt files)
-tkinter (for the user-interface)
-os (finding out whether file exists before opening to prevent run-time error)
-sys (getting command-line arguments for determining path of file)
-json (saving cache and filepaths)
+tkinter
+os
+sys
+json
