@@ -258,14 +258,14 @@ def allowentrytocommandpane():
         processcommand(command_pane.get())
         command_pane.delete(0,END)
         command_pane.config(state='disabled')
-"""
 accessqmark = False
 getaccess()
 if accessqmark != True:
     sys.exit()
-"""
 initializejson()
 root = Tk()
+root.grid_columnconfigure(0, weight=1)
+root.grid_rowconfigure(0, weight=1)
 #root.resizable(0,0)
 root.bind("<F2>",(lambda event: allowentrytocommandpane()))
 menubar = Menu(root)
