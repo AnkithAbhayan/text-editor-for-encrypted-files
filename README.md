@@ -21,7 +21,14 @@ cd "ankith's text editor/version - 1.3/"
 python texteditor.py
 ```  
 
-latest version - v1.3(still working on it!).    
-title of the editor window will contain the file-size.
-added an 'exit' button in the file menu of the menubar to stop runnng.
-previously opened files can be accessed through the menubar as well.
+## latest features
+- latest version - v1.3(still working on it!).    
+- title of the editor window will contain the file-size.
+- added an 'exit' button in the file menu of the menubar to stop runnng.
+- previously opened files can be accessed through the menubar as well.
+- sys.argv arguments can be passed for opening in safe mode (no encryption and decryption on opening and closing). this allows you to open any type of file without changing the contents.
+- "anonfalse" argument is equivalent to safe mode and "anontrue" argument is the basic mode (for opening .ankiecrypt files).
+
+## TODO:
+- make setup.py for adding files to path.
+- make open recent file feature work lol.
