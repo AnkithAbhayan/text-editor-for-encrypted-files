@@ -160,7 +160,12 @@ def getpath():
     if os.path.exists(jsonfilepath):
         with open(jsonfilepath, "r") as jsonFile:
             data = json.load(jsonFile)
-        return data["path"]
+        if os.path.exists(path:=data["path"]):
+            return path
+        else:
+            if path in data["previousfiles"]:
+                data["previousfiles"].remove(path)
+            return ""
     else:
         return ""
 def savepath(path):
@@ -193,17 +198,37 @@ def open_file(path):
             root.title(path+" ["+ankith.cryptography.findsize(os.path.getsize(path))+"]")
             savetofilehistory(path)
 def initialize():
-    path = getpath()
+    if len(sys.argv) > 1:
+        path = sys.argv[1]
+        if os.path.exists(path):
+            savepath(path)
+            pass
+        else:
+            path = getpath()
+    else:
+        path = getpath()
     data = ""
+    jsonpath = findjsonpath()
+    with open(jsonpath,"r") as JsonFile:
+        data = json.load(JsonFile)
+    for item in data["previousfiles"]:
+        if os.path.exists(item) == False:
+            data["previousfiles"].remove(item)
+    with open(jsonpath,"w") as JsonFile:
+        json.dump(data,JsonFile,indent=4)
     if os.path.exists(path):
         file = open(path,"r")
         data = file.read()
         file.close()
-    if getpath() == "":
-        root.title("ankiths text editor : untitled")
-    else:
         root.title(path+" ["+ankith.cryptography.findsize(os.path.getsize(path))+"]")
-    return ankith.cryptography.decrypt(data)
+    elif path == "":
+        data = ""
+        root.title("ankiths text editor : untitled") 
+    if "anonfalse" in sys.argv:  
+        return data
+    else:
+        return ankith.cryptography.decrypt(data)    
+
 def new_file():
     text_field.delete("1.0",END)
     path = findjsonpath()
@@ -226,7 +251,10 @@ def save_file(string):
             savepath(path)
     if path != "":
         file = open(path,"w")
-        file.write(ankith.cryptography.encrypt(text_field.get("1.0",END)))
+        if "anonfalse" in sys.argv:
+            file.write(text_field.get("1.0",END))
+        else:
+            file.write(ankith.cryptography.encrypt(text_field.get("1.0",END)))
         root.title(path+" ["+ankith.cryptography.findsize(os.path.getsize(path))+"]")
     jsonpath = findjsonpath()
     savetofilehistory(path)
