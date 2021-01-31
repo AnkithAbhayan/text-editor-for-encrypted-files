@@ -31,4 +31,4 @@ python texteditor.py
 
 ## TODO:
 - make setup.py for adding files to path.
-- make open recent file feature work lol.
+- make "open recent" button in the menubar work lol.
