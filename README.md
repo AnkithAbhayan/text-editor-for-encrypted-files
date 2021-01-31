@@ -5,7 +5,7 @@ this is fairly easy to use just like any other normal text editor.
 run - texteditor.py and not ankith.py  
 enjoy!  
 
-##installation steps:
+## installation steps:
 ```bash
 git clone "https://github.com/AnkithAbhayan/text-editor-for-encrypted-files" "ankith's text editor"
 cd "ankith's text editor"
@@ -14,7 +14,7 @@ cd "ankith's text editor\version - 1.3"
 python texteditor.py
 ```  
 another method would be to click the "download zip" button at the top (ie if you live in the 1960's)  
-##how to run  
+## how to run  
 ez  
 ```bash
 cd "ankith's text editor/version - 1.3/"
