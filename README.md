@@ -11,9 +11,8 @@ python -m pip install -r requirements.txt
 cd "ankith's text editor\version - 1.3"
 python texteditor.py
 ```  
-another method would be to click the "download zip" button at the top (ie if you live in the 1960's)  
+another method would be to click the "download zip" button at the top. 
 ## how to run  
-ez  
 ```bash
 cd "ankith's text editor/version - 1.3/"
 python texteditor.py
@@ -29,4 +28,4 @@ python texteditor.py
 
 ## TODO:
 - make setup.py for adding files to path.
-- make "open recent" button in the menubar work lol.
+- make "open recent" button in the menubar work.
