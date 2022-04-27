@@ -1,9 +1,7 @@
 # text-editor-for-encrypted-files
-This is a text editor to save and edit encrypted files of the extension .ankiecrypt (new file type made by me!)  
-So this text editor will let you open and close and edit encrypted files (encrypted by my encryption algorithm) of the extension - .ankiecrypt.  
+This is a text editor to save and edit encrypted files of the extension .ankiecrypt  
 this is fairly easy to use just like any other normal text editor.   
 run - texteditor.py and not ankith.py  
-enjoy!  
 
 ## installation steps:
 ```bash
